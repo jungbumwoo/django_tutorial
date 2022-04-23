@@ -1,9 +1,12 @@
 import json
 from django.forms.models import model_to_dict
+from rest_framework.decorators import api_view
+from requests import Response
 from django.http import JsonResponse
 
-from rest_framework.decorators import api_view
 from products.models import Product
+from products.serializers import ProductSerializer
+
 
 def api_home(request, *args, **kwargs):
     body = request.body # byte string of JSON data
@@ -47,6 +50,19 @@ def use_decorator_random(request, *args, **kwargs):
     model_data = Product.objects.all().order_by('?').first()
     data = {}
     if model_data:
-        data = model_to_dict(model_data, fields=['id', 'title', 'price'])
-        json_data_str = json.dumps(data)
-    return JsonResponse(json_data_str)
+        data = model_to_dict(model_data, fields=['id', 'title', 'price', 'sale_price'])
+    return JsonResponse(data)
+
+@api_view(["GET"])
+def use_serializer_random(request, *args, **kwargs):
+    '''
+    DEF API View
+    '''
+    print('here')
+    instance = Product.objects.all().order_by("?").first()
+    data = {}
+    if instance:
+        # data = model_to_dict(instance, fields=['id', 'title', 'price', 'sale_price'])
+        print('ㄱ. ProductSerializer(instance) at func use_serializer_random :은 {}'.format(ProductSerializer(instance)))
+        data = ProductSerializer(instance).data
+    return JsonResponse(data)
