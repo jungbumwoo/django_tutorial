@@ -8,9 +8,8 @@ from products.serializers import ProductSerializer
 
 @api_view(['POST'])
 def api_home(request, *args, **kwargs):
-    print(request.data)
     serializer = ProductSerializer(data=request.data)
-    if serializer.is_valid():
-        print(serializer.data)
-        data = serializer.data
-        return Response(data)
+    if serializer.is_valid(raise_exception=True): # raise exception 추가함으로서 에러를 보다 잘 파악할 수 있게 return 됨
+        instance = serializer.save()
+        print(instance)
+        return Response(serializer.data)
