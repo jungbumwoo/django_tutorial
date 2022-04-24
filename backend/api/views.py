@@ -66,3 +66,8 @@ def use_serializer_random(request, *args, **kwargs):
         print('ㄱ. ProductSerializer(instance) at func use_serializer_random :은 {}'.format(ProductSerializer(instance)))
         data = ProductSerializer(instance).data
     return JsonResponse(data)
+
+@api_view(['POST'])
+def post_random(request, *args, **kwargs):
+    data = request.data
+    return JsonResponse(data)
